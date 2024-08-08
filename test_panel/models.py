@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 class Science(models.Model):
     science_name = models.CharField(max_length=255, verbose_name="Fan nomi")
-    tests = models.ForeignKey(to='Test', verbose_name="Testlar")
+    tests = models.ForeignKey(to='Test', on_delete=models.CASCADE, verbose_name="Testlar")
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
 
