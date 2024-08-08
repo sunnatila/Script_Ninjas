@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-07 18:35+0000\n"
+"POT-Creation-Date: 2024-08-08 03:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,32 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: bank_panel/models.py:6
+
+msgid "Bank nomi"
+msgstr "Название банка"
+
+#: bank_panel/models.py:7
+msgid "Bank haqida"
+msgstr "О банке"
+
+#: bank_panel/models.py:8
+msgid "Bank manzili"
+msgstr "Адрес банка"
+
+#: bank_panel/models.py:9
+msgid "Bank rasmi"
+msgstr "Изображение банка"
+
+#: bank_panel/models.py:10
+msgid "Bank telefon raqami"
+msgstr "Телефонный номер банка"
+
+#: bank_panel/models.py:11
+msgid "Bank emaili"
+msgstr "Электронная почта банка"
+
 #: config/settings.py:132
 msgid "Uzbek"
 msgstr "Узбекский"
@@ -26,3 +52,71 @@ msgstr "Узбекский"
 #: config/settings.py:133
 msgid "Russian"
 msgstr "Русский"
+
+#: test_panel/models.py:6
+msgid "Savol"
+msgstr "Вопрос"
+
+#: test_panel/models.py:7
+msgid "Savol rasmi"
+msgstr "Изображение вопроса"
+
+#: test_panel/models.py:8
+msgid "Variant 1"
+msgstr "Вариант 1"
+
+#: test_panel/models.py:9
+msgid "Variant 2"
+msgstr "Вариант 2"
+
+#: test_panel/models.py:10
+msgid "Variant 3"
+msgstr "Вариант 3"
+
+#: test_panel/models.py:11
+msgid "Variant 4"
+msgstr "Вариант 4"
+
+#: test_panel/models.py:12
+msgid "To`g`ri javob"
+msgstr "Правильный ответ"
+
+#: test_panel/models.py:13
+msgid "Fan"
+msgstr "Предмет"
+
+#: test_panel/models.py:24
+msgid "Fan nomi"
+msgstr "Название предмета"
+
+#: test_panel/models.py:35
+msgid "Foydalanuvchi"
+msgstr "Пользователь"
+
+#: test_panel/models.py:36
+msgid "Savolning javobi"
+msgstr "Ответ на вопрос"
+
+#: test_panel/models.py:37 users/models.py:26
+msgid "Holati"
+msgstr "Статус"
+
+#: users/models.py:12 users/models.py:24
+msgid "Telefon raqam"
+msgstr "Телефонный номер"
+
+#: users/models.py:13
+msgid "Ish Turi"
+msgstr "Тип работы"
+
+#: users/models.py:14
+msgid "Test yechish uchun urunish"
+msgstr "Попытка решения теста"
+
+#: users/models.py:23
+msgid "Username"
+msgstr "Имя пользователя"
+
+#: users/models.py:25
+msgid "Xabar"
+msgstr "Сообщение"

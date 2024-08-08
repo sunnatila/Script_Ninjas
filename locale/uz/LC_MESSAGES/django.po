@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-07 18:35+0000\n"
+"POT-Creation-Date: 2024-08-08 03:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,10 +17,104 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+#: bank_panel/models.py:6
+msgid "Bank nomi"
+msgstr "Bank nomi"
+
+#: bank_panel/models.py:7
+msgid "Bank haqida"
+msgstr "Bank haqida"
+
+#: bank_panel/models.py:8
+msgid "Bank manzili"
+msgstr "Bank manzili"
+
+#: bank_panel/models.py:9
+msgid "Bank rasmi"
+msgstr "Bank rasmi"
+
+#: bank_panel/models.py:10
+msgid "Bank telefon raqami"
+msgstr "Bank telefon raqami"
+
+#: bank_panel/models.py:11
+msgid "Bank emaili"
+msgstr "Bank emaili"
+
 #: config/settings.py:132
 msgid "Uzbek"
-msgstr "O'zbekcha"
+msgstr "O'zbek"
 
 #: config/settings.py:133
 msgid "Russian"
-msgstr "Ruscha"
+msgstr "Rus"
+
+#: test_panel/models.py:6
+msgid "Savol"
+msgstr "Savol"
+
+#: test_panel/models.py:7
+msgid "Savol rasmi"
+msgstr "Savol rasmi"
+
+#: test_panel/models.py:8
+msgid "Variant 1"
+msgstr "Variant 1"
+
+#: test_panel/models.py:9
+msgid "Variant 2"
+msgstr "Variant 2"
+
+#: test_panel/models.py:10
+msgid "Variant 3"
+msgstr "Variant 3"
+
+#: test_panel/models.py:11
+msgid "Variant 4"
+msgstr "Variant 4"
+
+#: test_panel/models.py:12
+msgid "To`g`ri javob"
+msgstr "To'g'ri javob"
+
+#: test_panel/models.py:13
+msgid "Fan"
+msgstr "Fan"
+
+#: test_panel/models.py:24
+msgid "Fan nomi"
+msgstr "Fan nomi"
+
+#: test_panel/models.py:35
+msgid "Foydalanuvchi"
+msgstr "Foydalanuvchi"
+
+#: test_panel/models.py:36
+msgid "Savolning javobi"
+msgstr "Savolning javobi"
+
+#: test_panel/models.py:37 users/models.py:26
+msgid "Holati"
+msgstr "Holati"
+
+#: users/models.py:12 users/models.py:24
+msgid "Telefon raqam"
+msgstr "Telefon raqam"
+
+#: users/models.py:13
+msgid "Ish Turi"
+msgstr "Ish Turi"
+
+#: users/models.py:14
+msgid "Test yechish uchun urunish"
+msgstr "Test yechish uchun urunish"
+
+#: users/models.py:23
+msgid "Username"
+msgstr "Foydalanuvchi nomi"
+
+#: users/models.py:25
+msgid "Xabar"
+msgstr "Xabar"
+
