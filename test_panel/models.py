@@ -1,10 +1,8 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
-
+from users.models import CustomUser  # Importing CustomUser model
 
 class Science(models.Model):
     science_name = models.CharField(max_length=255, verbose_name="Fan nomi")
-    tests = models.ForeignKey(to='Test', on_delete=models.CASCADE, verbose_name="Testlar")
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
 
@@ -12,7 +10,6 @@ class Science(models.Model):
 
     def __str__(self):
         return self.science_name
-
 
 class Test(models.Model):
     question = models.CharField(max_length=255, verbose_name="Savol")
@@ -22,6 +19,7 @@ class Test(models.Model):
     variant3 = models.CharField(max_length=255, verbose_name="Variant 3")
     variant4 = models.CharField(max_length=255, verbose_name="Variant 4")
     right_answer = models.CharField(max_length=255, verbose_name="To`g`ri javob")
+    science = models.ForeignKey(Science, related_name='tests', on_delete=models.CASCADE, verbose_name="Fan")
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
 
@@ -30,15 +28,18 @@ class Test(models.Model):
     def __str__(self):
         return self.question
 
+    def save(self, *args, **kwargs):
+        if self.science.tests.count() >= 15:
+            raise ValueError("Ushbu fan uchun 15 tadan ortiq test yaratilishi mumkin emas.")
+        super().save(*args, **kwargs)
 
 class ExamTest(models.Model):
-    user = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE, verbose_name="Foydalanuvchi")
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="Foydalanuvchi")
     test = models.ForeignKey(Test, on_delete=models.CASCADE, verbose_name="Savol")
     selected_answer = models.CharField(max_length=255, verbose_name="Tanlangan javob")
     is_correct = models.BooleanField(default=False, verbose_name="To'g'ri javobmi")
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
-
 
     objects = models.Manager()
 
