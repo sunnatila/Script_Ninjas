@@ -13,7 +13,6 @@ class CustomUser(AbstractUser):
     dev_type = models.CharField(max_length=15, choices=DEV_TYPE_CHOICES, verbose_name=_("Ish Turi"))
     test_count = models.IntegerField(default=0, verbose_name=_("Test yechish uchun urunish"))
 
-    objects = models.Manager()
 
     def __str__(self):
         return self.username
