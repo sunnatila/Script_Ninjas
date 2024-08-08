@@ -14,4 +14,4 @@ class ScienceAdmin(admin.ModelAdmin):
 
 @admin.register(ExamTest)
 class ExamAdmin(admin.ModelAdmin):
-    list_display = ('status',)
+    list_display = ('user',)
