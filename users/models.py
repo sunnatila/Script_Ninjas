@@ -13,10 +13,10 @@ class CustomUser(AbstractUser):
     dev_type = models.CharField(max_length=15, choices=DEV_TYPE_CHOICES, verbose_name=_("Ish Turi"))
     test_count = models.IntegerField(default=0, verbose_name=_("Test yechish uchun urunish"))
 
+    objects = models.Manager()
+
     def __str__(self):
         return self.username
-
-    objects = models.Manager()
 
 
 class ContactForm(models.Model):
@@ -25,7 +25,8 @@ class ContactForm(models.Model):
     message = models.TextField(verbose_name=_("Xabar"))
     status = models.CharField(max_length=100, verbose_name=_("Holati"))
 
+    objects = models.Manager()
+
     def __str__(self):
         return self.name
 
-    objects = models.Manager()

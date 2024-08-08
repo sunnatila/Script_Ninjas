@@ -14,10 +14,10 @@ class Test(models.Model):
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
 
+    objects = models.Manager()
+
     def __str__(self):
         return self.question
-
-    objects = models.Manager()
 
 
 class Science(models.Model):
@@ -25,10 +25,10 @@ class Science(models.Model):
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
 
+    objects = models.Manager()
+
     def __str__(self):
         return self.science_name
-
-    objects = models.Manager()
 
 
 class ExamTest(models.Model):
