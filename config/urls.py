@@ -29,13 +29,11 @@ urlpatterns = [
    path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
    path('doc/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
    path('doc/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+   path('api/v1/', include('test_panel.urls')),
    path('', include('home_page.urls')),
-]
-urlpatterns += i18n_patterns(
-
-   path('set_language/', set_language, name='set_language'),
    path('api/v1/', include('users.urls')),
-)
+]
+
 urlpatterns += static(
     settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
