@@ -1,11 +1,11 @@
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import TestViewSet, ScienceViewSet
 
-router = DefaultRouter()
-router.register(r'tests', TestViewSet)
-router.register(r'sciences', ScienceViewSet)
+from .views import ScienceListView, ScienceDetailView, ScienceTestsView, ExamTestPostApiView
+
 
 urlpatterns = [
-    path('create/', include(router.urls)),
+    path('science/list/', ScienceListView.as_view(), name='science-list'),
+    path('sciences/<int:pk>/', ScienceDetailView.as_view(), name='science-detail'),
+    path('sciences/<int:science_id>/tests/', ScienceTestsView.as_view(), name='science-tests'),
+    path('pass_exam/', ExamTestPostApiView.as_view()),
 ]

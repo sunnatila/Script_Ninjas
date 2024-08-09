@@ -1,6 +1,9 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, generics
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from .models import Test, Science, ExamTest
 from .serializers import TestSerializer, ScienceSerializer, ExamTestSerializer
 from rest_framework.decorators import action
@@ -22,46 +25,60 @@ class TestViewSet(viewsets.ModelViewSet):
         return super().create(request, *args, **kwargs)
 
 
-class ScienceViewSet(viewsets.ModelViewSet):
+class ScienceCreateAPIView(generics.CreateAPIView):
     queryset = Science.objects.all()
     serializer_class = ScienceSerializer
     permission_classes = [IsAdminUser, ]
 
 
-class ExamTestViewSet(viewsets.ModelViewSet):
-    queryset = ExamTest.objects.all()
-    serializer_class = ExamTestSerializer
-    permission_classes = [IsAuthenticated, ]
+class ScienceListView(APIView):
+    queryset = Science.objects.all()
+    serializer_class = ScienceSerializer
+    permission_classes = [IsAuthenticated]
 
-    # def get(self, request):
-        # user =
-
-    def get_queryset(self):
-        user = self.request.user
-        return ExamTest.objects.filter(user=user)
-
-    def create(self, request, *args, **kwargs):
+    def get(self, request):
         user = request.user
-        if user.test_count >= 2:
-            return Response({"error": "Siz 2 marta test yechgansiz, sizga boshqa mumkin emas."},
-                            status=status.HTTP_400_BAD_REQUEST)
-        return super().create(request, *args, **kwargs)
 
-    @action(detail=False, methods=['post'])
-    def submit_answers(self, request):
+        if ExamTest.objects.filter(user=user).exists():
+            return Response({'detail': 'Siz boshqa test topshira olmaysiz'}, status=status.HTTP_403_FORBIDDEN)
+
+        sciences = Science.objects.all()
+        serializer = ScienceSerializer(sciences, many=True)
+        return Response(serializer.data)
+
+
+class ScienceDetailView(generics.RetrieveAPIView):
+    queryset = Science.objects.all()
+    serializer_class = ScienceSerializer
+    permission_classes = [IsAdminUser]
+
+
+class ScienceTestsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, science_id):
+        science = get_object_or_404(Science, id=science_id)
         user = request.user
-        exam_tests = ExamTest.objects.filter(user=user)
-        if exam_tests.count() < Test.objects.count():
-            return Response({"error": "Barcha testlarni yeching."}, status=status.HTTP_400_BAD_REQUEST)
 
-        incorrect_answers = exam_tests.filter(is_correct=False).count()
-        if incorrect_answers > 1:
-            user.test_count += 1
-            user.save()
-            return Response({"result": ("Siz testda 1 ta dan kop hato qildingiz va siz ishka kirolmadingiz. "
-                                       "Lekin hali kayfiyati tushurmang agar yana 1 ta imkoniyatiz"
-                                        " bo'lsa boshqatan topshirolisiz")})
+        if ExamTest.objects.filter(user=user, science=science).exists():
+            return Response({'detail': 'Siz boshqa test topshira olmaysiz'}, status=status.HTTP_403_FORBIDDEN)
 
-        user.test_count += 1
-        user.save()
-        return Response({"result": "Tabriklaymiz, siz testdan muvaffaqiyatli o'tdingiz!"})
+        tests = science.tests.all()
+        serializer = TestSerializer(tests, many=True)
+        return Response(serializer.data)
+
+
+class ExamTestPostApiView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        science = Science.objects.get(id=request.data.get('science_id'))
+
+        if ExamTest.objects.filter(user=user, science=science).exists():
+            return Response({'detail': 'Siz boshqa test topshira olmaysiz'}, status=status.HTTP_403_FORBIDDEN)
+
+        serializer = ExamTestSerializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        result = serializer.save()
+        return Response(result, status=status.HTTP_201_CREATED)

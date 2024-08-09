@@ -16,7 +16,7 @@ class RegisterView(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user = serializer.save()
+        serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 

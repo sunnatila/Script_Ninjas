@@ -1,5 +1,8 @@
 from django.db import models
-from users.models import CustomUser  # Importing CustomUser model
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
 
 class Science(models.Model):
     science_name = models.CharField(max_length=255, verbose_name="Fan nomi")
@@ -10,6 +13,7 @@ class Science(models.Model):
 
     def __str__(self):
         return self.science_name
+
 
 class Test(models.Model):
     question = models.CharField(max_length=255, verbose_name="Savol")
@@ -33,9 +37,10 @@ class Test(models.Model):
             raise ValueError("Ushbu fan uchun 15 tadan ortiq test yaratilishi mumkin emas.")
         super().save(*args, **kwargs)
 
+
 class ExamTest(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="Foydalanuvchi")
-    test = models.ForeignKey(Test, on_delete=models.CASCADE, verbose_name="Savol")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Foydalanuvchi")
+    science = models.ForeignKey(Science, on_delete=models.CASCADE, verbose_name="Fan")
     selected_answer = models.CharField(max_length=255, verbose_name="Tanlangan javob")
     is_correct = models.BooleanField(default=False, verbose_name="To'g'ri javobmi")
     created_at = models.DateField(auto_now_add=True)

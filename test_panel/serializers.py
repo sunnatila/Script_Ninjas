@@ -1,42 +1,88 @@
-from rest_framework import serializers
-from .models import Test, Science, ExamTest
+from rest_framework import serializers, status
+from rest_framework.response import Response
 
+from .models import Science, Test, ExamTest
+from django.contrib.auth import get_user_model
 
-class TestSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Test
-        fields = '__all__'
-
-    def validate(self, data):
-        right_answer = data.get('right_answer')
-        variants = [data.get('variant1'), data.get('variant2'), data.get('variant3'), data.get('variant4')]
-
-        if right_answer not in variants:
-            raise serializers.ValidationError({"right_answer": "To'g'ri javob variantlardan biriga ham to'g'ri kelmaydi."})
-        return data
+User = get_user_model()
 
 
 class ScienceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Science
-        fields = '__all__'
+        fields = ['id', 'science_name', 'created_at', 'updated_at']
 
 
-class ExamTestSerializer(serializers.ModelSerializer):
-    is_correct = serializers.SerializerMethodField()
+class TestSerializer(serializers.ModelSerializer):
+    science = serializers.SerializerMethodField()
+    class Meta:
+        model = Test
+        fields = ['id', 'question', 'question_image', 'variant1', 'variant2', 'variant3', 'variant4', 'right_answer',
+                  'science', 'created_at', 'updated_at']
 
+    def get_science(self, obj):
+        return obj.science.science_name
+
+
+class ExamTestListSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExamTest
-        fields = '__all__'
-        read_only_fields = ('user', 'is_correct')
+        fields = ['id', 'user', 'science', 'selected_answer', 'is_correct', 'created_at', 'updated_at']
+
+
+class ExamTestSerializer(serializers.Serializer):
+    science_id = serializers.IntegerField()
+    test_ids = serializers.ListField(child=serializers.IntegerField())
+    selected_answers = serializers.ListField(child=serializers.CharField())
+
+    def validate(self, data):
+        science_id = data.get('science_id')
+        test_ids = data.get('test_ids')
+        selected_answers = data.get('selected_answers')
+
+        if len(test_ids) != len(selected_answers):
+            raise serializers.ValidationError("Test IDs va selected answers soni bir xil bo'lishi kerak.")
+
+        science = Science.objects.filter(id=science_id).first()
+        if not science:
+            raise serializers.ValidationError("Berilgan fan mavjud emas.")
+
+        tests = Test.objects.filter(id__in=test_ids)
+        if tests.count() != len(test_ids):
+            raise serializers.ValidationError("Ba'zi testlar mavjud emas yoki noto'g'ri fan tanlangan.")
+
+        for test in tests:
+            if test.science.id != science_id:
+                raise serializers.ValidationError("Ba'zi testlar noto'g'ri fan bilan bog'langan.")
+
+        return data
 
     def create(self, validated_data):
         user = self.context['request'].user
-        validated_data['user'] = user
-        test = validated_data['test']
-        selected_answer = validated_data['selected_answer']
-        validated_data['is_correct'] = (selected_answer == test.right_answer)
-        return super().create(validated_data)
+        science_id = validated_data.get('science_id')
+        test_ids = validated_data.get('test_ids')
+        selected_answers = validated_data.get('selected_answers')
 
-    def get_is_correct(self, obj):
-        return obj.selected_answer == obj.test.right_answer
+        science = Science.objects.get(id=science_id)
+        correct_count = 0
+        incorrect_count = 0
+
+        for test_id, selected_answer in zip(test_ids, selected_answers):
+            test = Test.objects.get(id=test_id)
+            is_correct = test.right_answer == selected_answer
+            if is_correct:
+                correct_count += 1
+            else:
+                incorrect_count += 1
+
+            ExamTest.objects.create(
+                user=user,
+                science=science,
+                selected_answer=selected_answer,
+                is_correct=is_correct
+            )
+
+        if incorrect_count > 1:
+            return {"status": "Siz ishka kirolmadingiz chunki hatolaringiz 1 donadan kop."}
+        else:
+            return {"status": "Siz muvaffaqiyatli tarzda ishka kirdingiz."}
